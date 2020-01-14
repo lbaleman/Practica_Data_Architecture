@@ -1,15 +1,16 @@
-##Practica Data architecture##
+#Practica Data architecture
 
-# Idea general
+## Idea general
 Herramienta para usuarios que deseen encontrar vuelos y estancias en Airbnb económicas. Scraping de skyscanner para encontrar los vuelos más económicos en las fechas introducidas por el usuario y dar una lista de los apartamentos en Airbnb mas barato para la zona. (¿Ubicación importante?)
 
-# Nombre del prodcuto
+## Nombre del prodcuto
 Buscador de vuelo+estancia económicas
 
-# Estrategia del DAaas
+## Estrategia del DAaas
 Establecer una lista con los 25 apartamentos de airbnb más económicos en un rango de ubicación establecido por el usuario, para la fecha donde los vuelos sean más baratos.
 
-Primera duda:
+__Primera duda:__
+
 1.- Formato de la fecha:
 	- El usuario debe introducir la fecha concreta, tipo desde 14/01/2020 hasta 17/01/2020.
 	- Podría hacerse de una forma más general en la que el usuario solamente introduzca el mes del viaje. Aunque esto creo que es raro, ya que una vez hecho obtenido el dataset con los precios de todos los días, el usuario debería volver a interactuar para decidir la fecha final y que ahí se haga la query con el dataset de Airbnb.
@@ -25,7 +26,7 @@ Primera duda:
 4.- Disponibilidad de apartamentos en Airbnb
 	- Una vez tengamos el dataset de Airbnb y el de skyscanner, se hará una query en HIVE que determine los apartamentos más baratos en la ciudad. ¿Para determinar si esos apartamentos están disponibles habría que volver a crawlear esas direcciones de los apartamentos de airbnb?
 
-# Arquitectura
+## Arquitectura
 
 Al ser una herramienta que quiero usar yo a modo personal lo haría en Docker, pero entiendo que es mucho mas interesante hacerla con cloud. Por lo tanto, sería una arquitectura en Cloud basada en scrapy, Google Cloud Storage, Hive y Hadoop (Dataproc).
 Crawler con scrapy de skyscanner para obtener los vuelos de una fecha (ya sea concreta o no) establecida por el cliente. Sería interesante ejecutarla desde un cloud function. Mi duda es si el cliente tiene que meter los datos de ciudad y fecha, para hacerlo de manera elegante se podría hacer a través de una API con Python request???.
