@@ -1,4 +1,4 @@
-##Practica Data architecture
+##Practica Data architecture##
 
 # Idea general
 Herramienta para usuarios que deseen encontrar vuelos y estancias en Airbnb económicas. Scraping de skyscanner para encontrar los vuelos más económicos en las fechas introducidas por el usuario y dar una lista de los apartamentos en Airbnb mas barato para la zona. (¿Ubicación importante?)
