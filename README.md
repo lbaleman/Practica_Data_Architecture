@@ -9,6 +9,7 @@ Buscador de vuelo+estancia económicas
 ## Estrategia del DAaas
 Establecer una lista con los 25 apartamentos de airbnb más económicos en un rango de ubicación establecido por el usuario, para la fecha donde los vuelos sean más baratos.
 
+
 __Primera duda:__
 
 1.- Formato de la fecha:
@@ -28,13 +29,35 @@ __Primera duda:__
 
 ## Arquitectura
 
-Al ser una herramienta que quiero usar yo a modo personal lo haría en Docker, pero entiendo que es mucho mas interesante hacerla con cloud. Por lo tanto, sería una arquitectura en Cloud basada en scrapy, Google Cloud Storage, Hive y Hadoop (Dataproc).
-Crawler con scrapy de skyscanner para obtener los vuelos de una fecha (ya sea concreta o no) establecida por el cliente. Sería interesante ejecutarla desde un cloud function. Mi duda es si el cliente tiene que meter los datos de ciudad y fecha, para hacerlo de manera elegante se podría hacer a través de una API con Python request???.
+Arquitectura en Cloud basada en scrapy, Google Cloud Storage, Hive y Hadoop (Dataproc).
 
-Insertamos el dataset de Airbnb en Hive (esto solo lo hacemos una vez).
+#1.- ¿Cómo el usuario introducirá los datos?.
+	Pequeño servidor con una API donde el usuario pueda introducir los parámetros de entrada. 
+	__No se me ocurre otra manera de hacerlo.__
 
-Guardamos ambos dataset en un segmento de Google Cloud.
+#2.- Obtener dataset de Google flight.
+	Crawler con scrapy de Google flights con los siguientes parámetros de entrada: origen, destino, mes y duración del viaje. ¿Con que se inicia?	
+	Se podría descargar un fichero.csv con los siguientes parámetros: ciudad origen, ciudad destino, fecha inicio, fecha fin(fecha inicio+días seleccionados), precio ida+vuelta, compañía, hora de salida vuelo de ida, hora de salida vuelo de vuelta, enlace al vuelo. 
 
-Realizar una query que selecciones los vuelos más baratos con los alojamientos disponibles más baratos. Duda: Para asegurarnos de que los alojamientos estén disponibles, una vez hecha la transformación hay que crawlear las ubicaciones seleccionadas para ver su disponibilidad???
+#3.- Almacenamiento y limpieza dataset de Airbnb.
+	Insertamos el dataset de Airbnb completo en Google Storage. 
+	Realizamos la limpieza del dataset.
+	__Dudas con la limpieza:__
+	La limpieza de datos esta clara, extraer solo aquellos datos disponibles para la fecha seleccionada, que se encuentren en la ciudad de destino y que cumplan las condiciones de noches mínimas.
+	¿Cómo se podría ver la disponibilidad de los airbnb?: Se que esto con un crawler se puede hacer, pero creo que con una query de HIVE no se puede.
 
-Resultados en fichero en Google storage ¿y enviados por email?
+#4.- Almacenar dataset en Google Storage.
+	Almacenar dataset actualizado en Google Storage. 
+	Dudas sobre que hacer una vez terminada la consulta:
+	Deberíamos borrar ese dataset, porque no servirá para futuras consultas porque a lo mejor esos apartamentos ya han sido ocupados. Pero, ¿Cuánto tiempo después de realizar la consulta?.
+
+#5.- Inserción de datasets en HIVE.
+	Con los dos dataset (precios de vuelos) y Airbnb, creación de dos tablas en HIVE y se realizara una query que seleccione aquellos Airbnb.
+	La query deberá mostrar una lista de los 20 apartamentos más baratos para le fecha seleccionada. También es importante que tengan unos Reviw scores location y Review rates buenos, porque si solamente seleccionamos los baratos nos dará apartamentos muy lejos del centro, tampoco queremos eso.
+
+#6.- Resultados en fichero en Google storage .
+	Almacenar fichero en Google Storage.
+
+#7.- Mostrar resultados.
+	En el caso de elegir una API como interacción con el usuario, mostrar los resultados.
+
