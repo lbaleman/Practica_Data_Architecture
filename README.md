@@ -3,13 +3,16 @@ Comparador de vuelos y recomendador de estancias Airbnb para dicha fecha selecci
 
 __Definición de las dudas anteriores:__
 
-1.- Formato de los datos de entrada:
+__1.- Formato de los datos de entrada:__
+
 	- El usuario introducirá salida, destino, mes y duración del viaje.
 
-2.- Interacción del usuario en el proceso:
+__2.- Interacción del usuario en el proceso:__
+
 	- El usuario una vez introducidos los datos de entrada, la web le devolvera los vuelos disponibles para ese rango de fechas introducido. Luego, lanzara el segundo job para obtener la recomendacion de airbnb.
 
-3.- Disponibilidad de apartamentos en Airbnb
+__3.- Disponibilidad de apartamentos en Airbnb:__
+
 	- Para asegurar que tenemos siempre el dataset actualizado en HDFS, realizaremos crawler del listing de airbnb con un cron, de esta manera evitamos tener apartamentos en el listado que ya no estan en la plataforma.
 
 
@@ -62,7 +65,7 @@ __2.- ¿Quién y cómo lanzarás los jobs?__
 	Este servicio funcionara por peticiones a través de una pagina web, cada vez que un usuario quiera realizar una búsqueda introducirá los parámetros anteriormente descritos, ciudad de origen, ciudad de destino, mes del viaje y la duración del mismo. Dando al botón buscar, se activará un Python request con Google Function y se lanzara el job.
 	Tendremos dos tipos de Jobs. Cuando el usuario entre en la web e introduzca los parámetros de su vuelo, activara un Python request en el cual se le devolverá un listado con los vuelos disponibles para dicho rango de fecha seleccionado. Una vez seleccione la fecha concreta, lanzara un nuevo job para la recomendación de los Airbnb.
 	
-		1.- Primer job, mostrar vuelos para el rango de fecha seleccionado.
+		__1.- Primer job, mostrar vuelos para el rango de fecha seleccionado.__
 
 			Para tener un mayor acceso a los datos, por si el usuario desea cambiar de vuelo, guardaremos el resultado de esa query en Google segments: 
 		
@@ -76,7 +79,7 @@ __2.- ¿Quién y cómo lanzarás los jobs?__
 	
 			Mostrar dichos resultados en la web. 
 
-		2.- Segundo job, query de recomendación Airbnb.
+		__2.- Segundo job, query de recomendación Airbnb.__
 	
 			Una vez mostrados los resultados de viajes en la web, el usuario deberá elegir una fecha final sobre la que quiere que se le recomiende una lista de apartamentos.
 		
@@ -96,4 +99,5 @@ __2.- ¿Quién y cómo lanzarás los jobs?__
 	Como vamos a realizar querys bastante pesada y para evitar que el usuario espere por los resultados, utilizaremos una capa de cache en la que el servidor web ira primero para ver si los resultados de la petición estan en sus tablas y ahorrarnos asi el realizar de nuevo todas las querys tan pesados. Las tablas estaran en MongoDB solamente un dia, luego se borraran.
 
 ##Diagrama
+
 https://docs.google.com/drawings/d/1RCBEE4bhRuqp7Sc7ZK-8CXGDumQhtWfho1qgBD5Ep5I/edit
