@@ -20,7 +20,17 @@ __3.- Disponibilidad de apartamentos en Airbnb:__
 
 __Arquitectura en Cloud basada en scrapy, HDFS, Google Cloud Storage, Hive, MongoDB y Dataproc.__
 
-Utilizaremos una instancia fuera de Hadoop donde alojaremos un servidor wen, donde ira alojada la web con la los usuarios interactuaran. En ella deberán introducir ciudad de origen, destino, mes en el que desean viajar y la duración del mismo.
+A modo de resumen, he utilizado:
+
+	- Instancia donde alojaremos servidor web y los crons que realizaran los crawlers.
+	- Instancia donde ira mongoDB para guardar los resultados de las querys pesadas.
+	- Cluster de Hadoop con Dataproc.
+	- HDFS para guardar los datasets brutos.
+	- Google Segments para alojar los resultados de query y mostrarlos en la web.
+
+__Explicación mas detallada:__
+
+Utilizaremos una instancia fuera de Hadoop donde alojaremos un servidor web, donde ira la web con la que los usuarios interactuaran. En ella deberán introducir ciudad de origen, destino, mes en el que desean viajar y la duración del mismo.
 
 Crawler con scrapy mediante un cron que descarga los datos actualizados del listing de airbnb, para asegurar que el dataset que vayamos a usar tenga siempre los apartamentos disponibles actualizados, lo guardaremos en un csv. Guardamos dataset en HDFS.
 
